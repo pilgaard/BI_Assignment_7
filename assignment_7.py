@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 import nltk
-import heapq
+import matplotlib.pyplot as plt
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from pylab import polyfit, poly1d
 
 #Uncomment if first time using Vader.
 #nltk.download('vader_lexicon')
@@ -30,6 +31,14 @@ def vaderNLTK(data):
     worst = df.nlargest(5, 'neg')     
     print 'Best: ', '\n', best[['text', 'pos']]
     print 'Worst: ', '\n', worst[['text', 'neg']]
+
+    x, y, X = pos, neg, np.array([pos])
+    X = X.T
+    fit = np.polyfit(x,y,deg=1)
+    fit_fn = np.poly1d(fit)
+    plt.plot(X, y,'ro', X, fit_fn(X), 'b')
+    plt.show()
+    
     
 def run():
     vaderNLTK(HNData)
